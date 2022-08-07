@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import api from './api/posts';
 import EditPost from './EditPost';
 import useWindowSize from './hooks/useWindowSize';
+import useAxiosFetch from './hooks/useAxiosFetch';
 
 function App() {
   const [post, setPost] = useState([]);
@@ -22,28 +23,34 @@ function App() {
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
   const { width } = useWindowSize();
-  // const navigate = useNavigate();
+
+  const { data, fetchError, isLoading } = useAxiosFetch('http://localhost:3500/posts')
+
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await api.get('/posts');
-        setPost(response.data);
-      } catch (error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else {
-          console.log(`Error: ${error.message}`)
-        }
-      }
-    }
-    fetchPosts();
-  }, [])
+    setPost(data);
+  }, [data])
+
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const response = await api.get('/posts');
+  //       setPost(response.data);
+  //     } catch (error) {
+  //       if (error.response) {
+  //         console.log(error.response.data);
+  //         console.log(error.response.status);
+  //         console.log(error.response.headers);
+  //       } else {
+  //         console.log(`Error: ${error.message}`)
+  //       }
+  //     }
+  //   }
+  //   fetchPosts();
+  // }, [])
 
   useEffect(() => {
-    const filteredResults = post.filter(post =>
+    const filteredResults = post.filter((post) =>
       ((post.body).toLowerCase()).includes(search.toLowerCase())
       || ((post.title).toLowerCase()).includes(search.toLowerCase()));
 
@@ -106,7 +113,15 @@ function App() {
           <Link to="/about"> About </Link>
         </nav>
         <Routes>
-          <Route path="/" element={<Home posts={searchResults} />} />
+          <Route path="/"
+            element={
+              <Home
+                posts={searchResults}
+                fetchError={fetchError}
+                isLoading={isLoading}
+              />
+            }
+          />
           {/* <Route path="/new-post/:postname" element={<NewPost />} /> */}
           <Route path="/new-post"
             element={
