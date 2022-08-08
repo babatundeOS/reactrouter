@@ -1,18 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import DataContext from './context/DataContext';
 
-const EditPost = ({
-    posts, handleEdit, editBody, setEditBody, editTitle, setEditTitle
-}) => {
+
+const EditPost = () => {
+    const { post, handleEdit, editBody, setEditBody, editTitle, setEditTitle } = useContext(DataContext);
     const { id } = useParams();
-    const post = posts.find(post => (post.id).toString() === id);
+    const postal = post.find(post => (post.id).toString() === id);
 
     useEffect(() => {
-        if (post) {
-            setEditTitle(post.title);
-            setEditBody(post.body);
+        if (postal) {
+            setEditTitle(postal.title);
+            setEditBody(postal.body);
         }
-    }, [post, setEditTitle, setEditBody])
+    }, [postal, setEditTitle, setEditBody])
 
     return (
         <main className="NewPost">
@@ -39,7 +40,7 @@ const EditPost = ({
                             value={editBody}
                             onChange={(e) => setEditBody(e.target.value)}
                         />
-                        <button type="submit" onClick={() => handleEdit(post.id)}>Submit</button>
+                        <button type="submit" onClick={() => handleEdit(postal.id)}>Submit</button>
                     </form>
                 </>
             }
