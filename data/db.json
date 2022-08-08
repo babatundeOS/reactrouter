@@ -29,6 +29,12 @@
       "title": "Another Post",
       "datetime": "August 06, 2022 8:52:26 PM",
       "body": "THis is a new post after edit post"
+    },
+    {
+      "id": 8,
+      "title": "Testing 123",
+      "datetime": "August 07, 2022 10:33:08 PM",
+      "body": "Checking"
     }
   ]
 }
